@@ -1,7 +1,8 @@
-package com.umbrella.ermolaevshiftapp
+package com.umbrella.ermolaevshiftapp.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.umbrella.ermolaevshiftapp.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
