@@ -1,16 +1,16 @@
 package com.umbrella.ermolaevshiftapp.data.mapper
 
-import com.umbrella.ermolaevshiftapp.data.model.RegistrationRequestDataModel
-import com.umbrella.ermolaevshiftapp.data.model.RegistrationResponseDataModel
-import com.umbrella.ermolaevshiftapp.domain.entity.RegistrationRequest
-import com.umbrella.ermolaevshiftapp.domain.entity.RegistrationResponse
+import com.umbrella.ermolaevshiftapp.data.model.AuthDataModel
+import com.umbrella.ermolaevshiftapp.data.model.UserDataModel
+import com.umbrella.ermolaevshiftapp.domain.entity.Auth
+import com.umbrella.ermolaevshiftapp.domain.entity.User
 
-fun RegistrationRequest.toDataModel() = RegistrationRequestDataModel(
+fun Auth.toDataModel() = AuthDataModel(
     name,
     password
 )
 
-fun RegistrationResponseDataModel.toDomainModel() = RegistrationResponse(
+fun UserDataModel.toDomainModel() = User(
     name,
     role
 )

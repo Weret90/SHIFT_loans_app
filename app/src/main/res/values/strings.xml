@@ -3,4 +3,5 @@
     <string name="hint_name_input_field">Введите имя</string>
     <string name="hint_password_input_field">Введите пароль</string>
     <string name="btn_to_register_text">Зарегистрироваться</string>
+    <string name="btn_enter_text">Войти</string>
 </resources>

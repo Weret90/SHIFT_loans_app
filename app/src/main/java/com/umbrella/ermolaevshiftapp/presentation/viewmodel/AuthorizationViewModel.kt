@@ -5,14 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.umbrella.ermolaevshiftapp.domain.entity.Auth
-import com.umbrella.ermolaevshiftapp.domain.entity.User
-import com.umbrella.ermolaevshiftapp.domain.usecase.ToRegisterUseCase
+import com.umbrella.ermolaevshiftapp.domain.usecase.GetAuthTokenUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
-class RegistrationViewModel(private val toRegisterUseCase: ToRegisterUseCase) : ViewModel() {
+class AuthorizationViewModel(
+    private val getAuthTokenUseCase: GetAuthTokenUseCase,
+) : ViewModel() {
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
@@ -20,19 +21,19 @@ class RegistrationViewModel(private val toRegisterUseCase: ToRegisterUseCase) : 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
 
-    private val _success = MutableLiveData<User>()
-    val success: LiveData<User> get() = _success
+    private val _success = MutableLiveData<String>()
+    val success: LiveData<String> get() = _success
 
-    fun toRegister(name: String, password: String) {
+    fun toEnter(name: String, password: String) {
         if (name.isNotBlank() && password.isNotBlank()) {
             _loading.value = true
             val auth = Auth(name, password)
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    val user = toRegisterUseCase(auth)
+                    val token = getAuthTokenUseCase(auth)
                     withContext(Dispatchers.Main) {
                         _loading.value = false
-                        _success.value = user
+                        _success.value = token
                     }
                 } catch (httpException: HttpException) {
                     withContext(Dispatchers.Main) {
