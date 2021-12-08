@@ -21,8 +21,8 @@ class AuthorizationViewModel(
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
 
-    private val _success = MutableLiveData<String>()
-    val success: LiveData<String> get() = _success
+    private val _success = MutableLiveData<Pair<Auth, String>>()
+    val success: LiveData<Pair<Auth, String>> get() = _success
 
     fun toEnter(name: String, password: String) {
         if (name.isNotBlank() && password.isNotBlank()) {
@@ -32,8 +32,8 @@ class AuthorizationViewModel(
                 try {
                     val token = getAuthTokenUseCase(auth)
                     withContext(Dispatchers.Main) {
+                        _success.value = auth to token
                         _loading.value = false
-                        _success.value = token
                     }
                 } catch (httpException: HttpException) {
                     withContext(Dispatchers.Main) {
@@ -50,5 +50,9 @@ class AuthorizationViewModel(
         } else {
             _error.value = "Введите корректные имя и пароль"
         }
+    }
+
+    fun clearSuccessLiveData() {
+        _success.value = null
     }
 }

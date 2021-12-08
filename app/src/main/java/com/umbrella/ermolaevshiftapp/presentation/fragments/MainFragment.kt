@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.umbrella.ermolaevshiftapp.R
 import com.umbrella.ermolaevshiftapp.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
@@ -15,11 +16,13 @@ class MainFragment : Fragment() {
     companion object {
 
         private const val KEY_TOKEN = "token"
+        private const val KEY_NAME = "name"
 
-        fun newInstance(token: String): MainFragment {
+        fun newInstance(name: String, token: String): MainFragment {
             return MainFragment().apply {
                 arguments = Bundle().apply {
                     putString(KEY_TOKEN, token)
+                    putString(KEY_NAME, name)
                 }
             }
         }
@@ -40,8 +43,17 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val name = requireArguments().getString(KEY_NAME, "")
+        binding.welcomeTextView.text = String.format(getString(R.string.welcome_text_view), name)
+
         val token = requireArguments().getString(KEY_TOKEN, "")
 
-        binding.token.text = token
+        binding.buttonCreateLoan.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main_container, CreateLoanFragment.newInstance(token))
+                .addToBackStack(null)
+                .commit()
+        }
     }
 }

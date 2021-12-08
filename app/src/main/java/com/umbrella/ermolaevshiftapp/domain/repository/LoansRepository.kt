@@ -1,12 +1,13 @@
 package com.umbrella.ermolaevshiftapp.domain.repository
 
-import com.umbrella.ermolaevshiftapp.domain.entity.Auth
-import com.umbrella.ermolaevshiftapp.domain.entity.User
+import com.umbrella.ermolaevshiftapp.domain.entity.*
 
 interface LoansRepository {
 
     suspend fun toRegister(auth: Auth): User
     suspend fun getAuthToken(auth: Auth): String
+    suspend fun getLoanConditions(token: String): LoanConditions
+    suspend fun createLoan(token: String, loanRequest: LoanRequest): Loan
 //    fun getWelcomeMessage()
 //    fun getLoan()
 //    fun goToSuccessScreen()

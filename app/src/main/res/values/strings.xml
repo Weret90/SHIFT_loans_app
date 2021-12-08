@@ -4,4 +4,18 @@
     <string name="hint_password_input_field">Введите пароль</string>
     <string name="btn_to_register_text">Зарегистрироваться</string>
     <string name="btn_enter_text">Войти</string>
+    <string name="condition_percent">Процент: %s</string>
+    <string name="condition_period">Период: %s</string>
+    <string name="condition_max_amount">Максимальная сумма: %s</string>
+    <string name="label_loan_conditions">Условия займа:</string>
+    <string name="welcome_text_view">Приветствуем Вас, %s!</string>
+    <string name="hint_percent_et">Введите процент</string>
+    <string name="hint_period_et">Введите период</string>
+    <string name="hint_amount_et">Введите сумму</string>
+    <string name="button_create_loan">Оформить займ</string>
+    <string name="hint_phone_number_et">Введите номер телефона</string>
+    <string name="hint_name_et">Введите имя</string>
+    <string name="hint_last_name_et">Введите фамилию</string>
+    <string name="button_actual_loans">Текущие займы</string>
+    <string name="button_loans_history">История займов</string>
 </resources>

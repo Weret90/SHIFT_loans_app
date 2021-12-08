@@ -39,10 +39,14 @@ class AuthorizationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.success.observe(viewLifecycleOwner) {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.main_container, MainFragment.newInstance(it))
-                .addToBackStack(null)
-                .commit()
+            it?.let {
+                viewModel.clearSuccessLiveData()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main_container,
+                        MainFragment.newInstance(it.first.name, it.second))
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
 
         viewModel.error.observe(viewLifecycleOwner) {
