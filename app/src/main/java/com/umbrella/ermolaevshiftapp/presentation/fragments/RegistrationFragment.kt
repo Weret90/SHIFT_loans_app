@@ -10,7 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.umbrella.ermolaevshiftapp.data.network.RetrofitInstance
 import com.umbrella.ermolaevshiftapp.data.repository.LoansRepositoryImpl
 import com.umbrella.ermolaevshiftapp.databinding.FragmentRegistrationBinding
+import com.umbrella.ermolaevshiftapp.domain.entity.User
 import com.umbrella.ermolaevshiftapp.domain.usecase.ToRegisterUseCase
+import com.umbrella.ermolaevshiftapp.presentation.State
 import com.umbrella.ermolaevshiftapp.presentation.viewmodel.RegistrationViewModel
 import com.umbrella.ermolaevshiftapp.presentation.viewmodel.RegistrationViewModelFactory
 
@@ -43,22 +45,9 @@ class RegistrationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.success.observe(viewLifecycleOwner) {
-            showToast("Регистрация прошла успешно: $it")
-            parentFragmentManager.popBackStack()
-        }
-
-        viewModel.error.observe(viewLifecycleOwner) {
-            showToast(it)
-        }
-
-        viewModel.loading.observe(viewLifecycleOwner) { shouldShowLoadingBar ->
-            if (shouldShowLoadingBar) {
-                binding.loadingBar.visibility = View.VISIBLE
-                binding.registrationLayout.visibility = View.GONE
-            } else {
-                binding.loadingBar.visibility = View.GONE
-                binding.registrationLayout.visibility = View.VISIBLE
+        viewModel.registrationLiveData.observe(viewLifecycleOwner) { registrationState ->
+            registrationState?.let {
+                renderData(registrationState)
             }
         }
 
@@ -69,7 +58,28 @@ class RegistrationFragment : Fragment() {
         }
     }
 
-    private fun showToast(text: String) {
+    private fun renderData(state: State<User>) {
+        when (state) {
+            is State.Loading -> {
+                binding.loadingBar.visibility = View.VISIBLE
+                binding.registrationLayout.visibility = View.GONE
+            }
+            is State.Success<User> -> {
+                binding.loadingBar.visibility = View.GONE
+                binding.registrationLayout.visibility = View.VISIBLE
+                showToast("Регистрация прошла успешно: ${state.data}")
+                parentFragmentManager.popBackStack()
+            }
+            is State.Error -> {
+                binding.loadingBar.visibility = View.GONE
+                binding.registrationLayout.visibility = View.VISIBLE
+                showToast(state.errorMessage)
+            }
+        }
+        viewModel.clearRegistrationLiveData()
+    }
+
+    private fun showToast(text: String?) {
         Toast.makeText(context, text, Toast.LENGTH_LONG).show()
     }
 

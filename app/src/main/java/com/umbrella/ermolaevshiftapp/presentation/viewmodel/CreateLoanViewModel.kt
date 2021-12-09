@@ -9,6 +9,7 @@ import com.umbrella.ermolaevshiftapp.domain.entity.LoanConditions
 import com.umbrella.ermolaevshiftapp.domain.entity.LoanRequest
 import com.umbrella.ermolaevshiftapp.domain.usecase.CreateLoanUSeCase
 import com.umbrella.ermolaevshiftapp.domain.usecase.GetLoanConditionsUseCase
+import com.umbrella.ermolaevshiftapp.presentation.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -21,42 +22,34 @@ class CreateLoanViewModel(
     private val createLoanUSeCase: CreateLoanUSeCase,
 ) : ViewModel() {
 
-    private val _errorLoanConditions = MutableLiveData<String>()
-    val errorLoanConditions: LiveData<String> get() = _errorLoanConditions
+    private val _createLoanLiveData = MutableLiveData<State<Loan>>()
+    val createLoanLiveData: LiveData<State<Loan>> get() = _createLoanLiveData
 
-    private val _errorLoan = MutableLiveData<String>()
-    val errorLoan: LiveData<String> get() = _errorLoan
+    private val _getLoanConditionsLiveData = MutableLiveData<State<LoanConditions>>()
+    val getLoanConditionsLiveData: LiveData<State<LoanConditions>> get() = _getLoanConditionsLiveData
 
-    private val _loadingLoanConditions = MutableLiveData<Boolean>()
-    val loadingLoanConditions: LiveData<Boolean> get() = _loadingLoanConditions
-
-    private val _loadingLoan = MutableLiveData<Boolean>()
-    val loadingLoan: LiveData<Boolean> get() = _loadingLoan
-
-    private val _successLoanConditions = MutableLiveData<LoanConditions>()
-    val successLoanConditions: LiveData<LoanConditions> get() = _successLoanConditions
-
-    private val _successLoan = MutableLiveData<Loan>()
-    val successLoan: LiveData<Loan> get() = _successLoan
+    companion object {
+        private const val ERROR_INPUT_DATA =
+            "Введены некорректные данные. Дробным может быть только процент, числа не должны содержать пробелы"
+        private const val ERROR_EMPTY_FIELDS = "Некоторые поля не заполнены, заполните все поля"
+    }
 
     fun getLoanConditions(token: String) {
-        _loadingLoanConditions.value = true
+        _getLoanConditionsLiveData.value = State.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val loanConditions = getLoanConditionsUseCase(token)
                 withContext(Dispatchers.Main) {
-                    _loadingLoanConditions.value = false
-                    _successLoanConditions.value = loanConditions
+                    _getLoanConditionsLiveData.value = State.Success(loanConditions)
                 }
             } catch (httpException: HttpException) {
                 withContext(Dispatchers.Main) {
-                    _loadingLoanConditions.value = false
-                    _errorLoanConditions.value = httpException.response()?.errorBody()?.string()
+                    _getLoanConditionsLiveData.value =
+                        State.Error(httpException.response()?.errorBody()?.string())
                 }
             } catch (exception: Exception) {
                 withContext(Dispatchers.Main) {
-                    _loadingLoanConditions.value = false
-                    _errorLoanConditions.value = exception.message
+                    _getLoanConditionsLiveData.value = State.Error(exception.message)
                 }
             }
         }
@@ -71,31 +64,27 @@ class CreateLoanViewModel(
         period: String,
         phoneNumber: String,
     ) {
-        _loadingLoan.value = true
+        _createLoanLiveData.value = State.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val loanRequest =
                     parseInputData(firstName, lastName, amount, percent, period, phoneNumber)
                 val loan = createLoanUSeCase(token, loanRequest)
                 withContext(Dispatchers.Main) {
-                    _loadingLoan.value = false
-                    _successLoan.value = loan
+                    _createLoanLiveData.value = State.Success(loan)
                 }
             } catch (httpException: HttpException) {
                 withContext(Dispatchers.Main) {
-                    _loadingLoan.value = false
-                    _errorLoan.value = httpException.response()?.errorBody()?.string()
+                    _createLoanLiveData.value =
+                        State.Error(httpException.response()?.errorBody()?.string())
                 }
             } catch (numberFormatException: NumberFormatException) {
                 withContext(Dispatchers.Main) {
-                    _loadingLoan.value = false
-                    _errorLoan.value =
-                        "Введены некорректные данные. Дробным может быть только процент, числа не должны содержать пробелы"
+                    _createLoanLiveData.value = State.Error(ERROR_INPUT_DATA)
                 }
             } catch (exception: Exception) {
                 withContext(Dispatchers.Main) {
-                    _loadingLoan.value = false
-                    _errorLoan.value = exception.message
+                    _createLoanLiveData.value = State.Error(exception.message)
                 }
             }
         }
@@ -126,7 +115,15 @@ class CreateLoanViewModel(
                 phoneNumber.trim()
             )
         } else {
-            throw RuntimeException("Некоторые поля не заполнены, заполните все поля")
+            throw RuntimeException(ERROR_EMPTY_FIELDS)
         }
+    }
+
+    fun clearCreateLoanLiveData() {
+        _createLoanLiveData.value = null
+    }
+
+    fun clearGetLoanConditionsLiveData() {
+        _getLoanConditionsLiveData.value = null
     }
 }

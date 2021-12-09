@@ -28,4 +28,5 @@
     <string name="loan_amount">Сумма займа, в рублях: %s</string>
     <string name="loan_phone_number">Номер телефона: %s</string>
     <string name="message_you_have_no_loans">На данный момент у Вас нет никаких займов</string>
+    <string name="snackbar_action_text">Reload</string>
 </resources>

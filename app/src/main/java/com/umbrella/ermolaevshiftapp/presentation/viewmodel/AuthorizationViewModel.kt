@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.umbrella.ermolaevshiftapp.domain.entity.Auth
 import com.umbrella.ermolaevshiftapp.domain.usecase.GetAuthTokenUseCase
+import com.umbrella.ermolaevshiftapp.presentation.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -15,44 +16,40 @@ class AuthorizationViewModel(
     private val getAuthTokenUseCase: GetAuthTokenUseCase,
 ) : ViewModel() {
 
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> get() = _error
+    private val _authorizationLiveData = MutableLiveData<State<Pair<Auth, String>>>()
+    val authorizationLiveData: LiveData<State<Pair<Auth, String>>> get() = _authorizationLiveData
 
-    private val _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean> get() = _loading
-
-    private val _success = MutableLiveData<Pair<Auth, String>>()
-    val success: LiveData<Pair<Auth, String>> get() = _success
+    companion object {
+        private const val ERROR_INPUT_DATA = "Введите корректные имя и пароль"
+    }
 
     fun toEnter(name: String, password: String) {
         if (name.isNotBlank() && password.isNotBlank()) {
-            _loading.value = true
+            _authorizationLiveData.value = State.Loading
             val auth = Auth(name, password)
             viewModelScope.launch(Dispatchers.IO) {
                 try {
                     val token = getAuthTokenUseCase(auth)
                     withContext(Dispatchers.Main) {
-                        _success.value = auth to token
-                        _loading.value = false
+                        _authorizationLiveData.value = State.Success(auth to token)
                     }
                 } catch (httpException: HttpException) {
                     withContext(Dispatchers.Main) {
-                        _loading.value = false
-                        _error.value = httpException.response()?.errorBody()?.string()
+                        _authorizationLiveData.value =
+                            State.Error(httpException.response()?.errorBody()?.string())
                     }
                 } catch (exception: Exception) {
                     withContext(Dispatchers.Main) {
-                        _loading.value = false
-                        _error.value = exception.message
+                        _authorizationLiveData.value = State.Error(exception.message)
                     }
                 }
             }
         } else {
-            _error.value = "Введите корректные имя и пароль"
+            _authorizationLiveData.value = State.Error(ERROR_INPUT_DATA)
         }
     }
 
-    fun clearSuccessLiveData() {
-        _success.value = null
+    fun clearAuthorizationLiveData() {
+        _authorizationLiveData.value = null
     }
 }

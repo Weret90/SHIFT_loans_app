@@ -11,7 +11,9 @@ import com.umbrella.ermolaevshiftapp.R
 import com.umbrella.ermolaevshiftapp.data.network.RetrofitInstance
 import com.umbrella.ermolaevshiftapp.data.repository.LoansRepositoryImpl
 import com.umbrella.ermolaevshiftapp.databinding.FragmentAuthorizationBinding
+import com.umbrella.ermolaevshiftapp.domain.entity.Auth
 import com.umbrella.ermolaevshiftapp.domain.usecase.GetAuthTokenUseCase
+import com.umbrella.ermolaevshiftapp.presentation.State
 import com.umbrella.ermolaevshiftapp.presentation.viewmodel.AuthorizationViewModel
 import com.umbrella.ermolaevshiftapp.presentation.viewmodel.AuthorizationViewModelFactory
 
@@ -38,28 +40,9 @@ class AuthorizationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.success.observe(viewLifecycleOwner) {
-            it?.let {
-                viewModel.clearSuccessLiveData()
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.main_container,
-                        MainFragment.newInstance(it.first.name, it.second))
-                    .addToBackStack(null)
-                    .commit()
-            }
-        }
-
-        viewModel.error.observe(viewLifecycleOwner) {
-            showToast(it)
-        }
-
-        viewModel.loading.observe(viewLifecycleOwner) { shouldShowLoadingBar ->
-            if (shouldShowLoadingBar) {
-                binding.loadingBar.visibility = View.VISIBLE
-                binding.authorizationLayout.visibility = View.GONE
-            } else {
-                binding.loadingBar.visibility = View.GONE
-                binding.authorizationLayout.visibility = View.VISIBLE
+        viewModel.authorizationLiveData.observe(viewLifecycleOwner) { authorizationState ->
+            authorizationState?.let {
+                renderData(authorizationState)
             }
         }
 
@@ -77,7 +60,31 @@ class AuthorizationFragment : Fragment() {
         }
     }
 
-    private fun showToast(text: String) {
+    private fun renderData(state: State<Pair<Auth, String>>) {
+        when (state) {
+            is State.Loading -> {
+                binding.loadingBar.visibility = View.VISIBLE
+                binding.authorizationLayout.visibility = View.GONE
+            }
+            is State.Success -> {
+                binding.loadingBar.visibility = View.GONE
+                binding.authorizationLayout.visibility = View.VISIBLE
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main_container,
+                        MainFragment.newInstance(state.data.first.name, state.data.second))
+                    .addToBackStack(null)
+                    .commit()
+            }
+            is State.Error -> {
+                binding.loadingBar.visibility = View.GONE
+                binding.authorizationLayout.visibility = View.VISIBLE
+                showToast(state.errorMessage)
+            }
+        }
+        viewModel.clearAuthorizationLiveData()
+    }
+
+    private fun showToast(text: String?) {
         Toast.makeText(context, text, Toast.LENGTH_LONG).show()
     }
 
