@@ -16,6 +16,9 @@
     <string name="hint_phone_number_et">Введите номер телефона</string>
     <string name="hint_name_et">Введите имя</string>
     <string name="hint_last_name_et">Введите фамилию</string>
-    <string name="button_actual_loans">Текущие займы</string>
-    <string name="button_loans_history">История займов</string>
+    <string name="button_my_loans">Мои займы</string>
+    <string name="loan_date">Дата займа: %s</string>
+    <string name="loan_status">Статус займа: %s</string>
+    <string name="loan_amount">%s руб.</string>
+    <string name="message_you_have_no_loans">На данный момент у Вас нет никаких займов</string>
 </resources>

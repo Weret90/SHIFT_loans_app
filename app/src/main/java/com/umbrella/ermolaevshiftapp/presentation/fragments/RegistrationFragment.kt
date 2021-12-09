@@ -45,6 +45,7 @@ class RegistrationFragment : Fragment() {
 
         viewModel.success.observe(viewLifecycleOwner) {
             showToast("Регистрация прошла успешно: $it")
+            parentFragmentManager.popBackStack()
         }
 
         viewModel.error.observe(viewLifecycleOwner) {

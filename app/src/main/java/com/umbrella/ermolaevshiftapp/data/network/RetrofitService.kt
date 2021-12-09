@@ -20,6 +20,9 @@ interface RetrofitService {
     @POST("loans")
     suspend fun createLoan(
         @Header("Authorization") token: String,
-        @Body loanRequest: LoanRequestDataModel
+        @Body loanRequest: LoanRequestDataModel,
     ): LoanDataModel
+
+    @GET("loans/all")
+    suspend fun getAllLoans(@Header("Authorization") token: String): List<LoanDataModel>
 }

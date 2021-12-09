@@ -67,7 +67,7 @@ class CreateLoanFragment : Fragment() {
                 binding.lastNameEt.text.toString(),
                 binding.amountEt.text.toString(),
                 binding.percentEt.text.toString(),
-                binding.percentEt.text.toString(),
+                binding.periodEt.text.toString(),
                 binding.phoneNumberEt.text.toString()
             )
         }

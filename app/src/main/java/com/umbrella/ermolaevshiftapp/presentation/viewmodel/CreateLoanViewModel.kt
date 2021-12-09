@@ -118,12 +118,12 @@ class CreateLoanViewModel(
             && phoneNumber.isNotBlank()
         ) {
             return LoanRequest(
-                amount.toInt(),
-                firstName,
-                lastName,
-                percent.toDouble(),
-                period.toInt(),
-                phoneNumber
+                amount.trim().toInt(),
+                firstName.trim(),
+                lastName.trim(),
+                percent.trim().toDouble(),
+                period.trim().toInt(),
+                phoneNumber.trim()
             )
         } else {
             throw RuntimeException("Некоторые поля не заполнены, заполните все поля")

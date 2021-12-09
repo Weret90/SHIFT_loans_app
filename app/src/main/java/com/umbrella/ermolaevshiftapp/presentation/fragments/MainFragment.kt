@@ -55,5 +55,12 @@ class MainFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+
+        binding.buttonMyLoans.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main_container, LoansFragment.newInstance(token))
+                .addToBackStack(null)
+                .commit()
+        }
     }
 }

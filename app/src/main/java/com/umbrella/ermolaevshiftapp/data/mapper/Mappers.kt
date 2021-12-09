@@ -39,3 +39,7 @@ fun LoanDataModel.toDomainModel() = Loan(
     phoneNumber,
     state
 )
+
+fun List<LoanDataModel>.toDomainModel() = this.map {
+    it.toDomainModel()
+}
