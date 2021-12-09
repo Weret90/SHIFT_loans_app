@@ -6,27 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.umbrella.ermolaevshiftapp.data.network.RetrofitInstance
-import com.umbrella.ermolaevshiftapp.data.repository.LoansRepositoryImpl
 import com.umbrella.ermolaevshiftapp.databinding.FragmentRegistrationBinding
 import com.umbrella.ermolaevshiftapp.domain.entity.User
-import com.umbrella.ermolaevshiftapp.domain.usecase.ToRegisterUseCase
 import com.umbrella.ermolaevshiftapp.presentation.State
 import com.umbrella.ermolaevshiftapp.presentation.viewmodel.RegistrationViewModel
-import com.umbrella.ermolaevshiftapp.presentation.viewmodel.RegistrationViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RegistrationFragment : Fragment() {
 
     private var _binding: FragmentRegistrationBinding? = null
     private val binding get() = _binding!!
 
-    private val factory: RegistrationViewModelFactory by lazy {
-        RegistrationViewModelFactory(ToRegisterUseCase(LoansRepositoryImpl(RetrofitInstance.api)))
-    }
-    private val viewModel: RegistrationViewModel by lazy {
-        ViewModelProvider(this, factory)[RegistrationViewModel::class.java]
-    }
+    private val viewModel by viewModel<RegistrationViewModel>()
 
     companion object {
         fun newInstance(): RegistrationFragment {

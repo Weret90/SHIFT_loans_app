@@ -6,28 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.umbrella.ermolaevshiftapp.R
-import com.umbrella.ermolaevshiftapp.data.network.RetrofitInstance
-import com.umbrella.ermolaevshiftapp.data.repository.LoansRepositoryImpl
 import com.umbrella.ermolaevshiftapp.databinding.FragmentAuthorizationBinding
 import com.umbrella.ermolaevshiftapp.domain.entity.Auth
-import com.umbrella.ermolaevshiftapp.domain.usecase.GetAuthTokenUseCase
 import com.umbrella.ermolaevshiftapp.presentation.State
 import com.umbrella.ermolaevshiftapp.presentation.viewmodel.AuthorizationViewModel
-import com.umbrella.ermolaevshiftapp.presentation.viewmodel.AuthorizationViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AuthorizationFragment : Fragment() {
 
     private var _binding: FragmentAuthorizationBinding? = null
     private val binding get() = _binding!!
 
-    private val factory: AuthorizationViewModelFactory by lazy {
-        AuthorizationViewModelFactory(GetAuthTokenUseCase(LoansRepositoryImpl(RetrofitInstance.api)))
-    }
-    private val viewModel: AuthorizationViewModel by lazy {
-        ViewModelProvider(this, factory)[AuthorizationViewModel::class.java]
-    }
+    private val viewModel by viewModel<AuthorizationViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

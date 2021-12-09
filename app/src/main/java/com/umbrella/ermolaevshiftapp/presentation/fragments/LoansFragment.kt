@@ -5,18 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.umbrella.ermolaevshiftapp.R
-import com.umbrella.ermolaevshiftapp.data.network.RetrofitInstance
-import com.umbrella.ermolaevshiftapp.data.repository.LoansRepositoryImpl
 import com.umbrella.ermolaevshiftapp.databinding.FragmentLoansBinding
 import com.umbrella.ermolaevshiftapp.domain.entity.Loan
-import com.umbrella.ermolaevshiftapp.domain.usecase.GetAllLoansUseCase
 import com.umbrella.ermolaevshiftapp.presentation.State
 import com.umbrella.ermolaevshiftapp.presentation.adapters.LoansAdapter
 import com.umbrella.ermolaevshiftapp.presentation.viewmodel.LoansViewModel
-import com.umbrella.ermolaevshiftapp.presentation.viewmodel.LoansViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoansFragment : Fragment() {
 
@@ -25,14 +21,8 @@ class LoansFragment : Fragment() {
 
     private lateinit var token: String
 
-    private val factory: LoansViewModelFactory by lazy {
-        LoansViewModelFactory(
-            GetAllLoansUseCase(LoansRepositoryImpl(RetrofitInstance.api))
-        )
-    }
-    private val viewModel: LoansViewModel by lazy {
-        ViewModelProvider(this, factory)[LoansViewModel::class.java]
-    }
+    private val viewModel by viewModel<LoansViewModel>()
+
     private val loansAdapter: LoansAdapter by lazy {
         LoansAdapter()
     }

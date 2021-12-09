@@ -6,19 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.umbrella.ermolaevshiftapp.R
-import com.umbrella.ermolaevshiftapp.data.network.RetrofitInstance
-import com.umbrella.ermolaevshiftapp.data.repository.LoansRepositoryImpl
 import com.umbrella.ermolaevshiftapp.databinding.FragmentCreateLoanBinding
 import com.umbrella.ermolaevshiftapp.domain.entity.Loan
 import com.umbrella.ermolaevshiftapp.domain.entity.LoanConditions
-import com.umbrella.ermolaevshiftapp.domain.usecase.CreateLoanUSeCase
-import com.umbrella.ermolaevshiftapp.domain.usecase.GetLoanConditionsUseCase
 import com.umbrella.ermolaevshiftapp.presentation.State
 import com.umbrella.ermolaevshiftapp.presentation.viewmodel.CreateLoanViewModel
-import com.umbrella.ermolaevshiftapp.presentation.viewmodel.CreateLoanViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CreateLoanFragment : Fragment() {
 
@@ -27,15 +22,7 @@ class CreateLoanFragment : Fragment() {
 
     private lateinit var token: String
 
-    private val factory: CreateLoanViewModelFactory by lazy {
-        CreateLoanViewModelFactory(
-            GetLoanConditionsUseCase(LoansRepositoryImpl(RetrofitInstance.api)),
-            CreateLoanUSeCase(LoansRepositoryImpl(RetrofitInstance.api))
-        )
-    }
-    private val viewModel: CreateLoanViewModel by lazy {
-        ViewModelProvider(this, factory)[CreateLoanViewModel::class.java]
-    }
+    private val viewModel by viewModel<CreateLoanViewModel>()
 
     companion object {
 
@@ -102,7 +89,7 @@ class CreateLoanFragment : Fragment() {
             is State.Success -> {
                 binding.createLoanInputFields.visibility = View.VISIBLE
                 binding.loadingBar.visibility = View.GONE
-                showToast("Займ успешно оформлен!")
+                showToast("Займ №${state.data.id} успешно оформлен!")
                 parentFragmentManager.popBackStack()
             }
             is State.Error -> {
