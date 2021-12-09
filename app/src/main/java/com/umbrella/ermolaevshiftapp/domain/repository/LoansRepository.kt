@@ -9,9 +9,4 @@ interface LoansRepository {
     suspend fun getLoanConditions(token: String): LoanConditions
     suspend fun createLoan(token: String, loanRequest: LoanRequest): Loan
     suspend fun getAllLoans(token: String): List<Loan>
-//    fun getWelcomeMessage()
-//    fun getLoan()
-//    fun goToSuccessScreen()
-//    fun goToErrorScreen()
-//    fun getInfoAboutLoans()
 }

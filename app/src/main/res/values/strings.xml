@@ -17,8 +17,15 @@
     <string name="hint_name_et">Введите имя</string>
     <string name="hint_last_name_et">Введите фамилию</string>
     <string name="button_my_loans">Мои займы</string>
-    <string name="loan_date">Дата займа: %s</string>
+    <string name="loan_date">Дата оформления: %s</string>
     <string name="loan_status">Статус займа: %s</string>
-    <string name="loan_amount">%s руб.</string>
+    <string name="loan_amount_in_item">%s руб.</string>
+    <string name="loan_id">Номер займа: %s</string>
+    <string name="loan_first_name">Имя оформителя: %s</string>
+    <string name="loan_last_name">Фамилия оформителя: %s</string>
+    <string name="loan_percent">Процент займа: %s</string>
+    <string name="loan_period">Период, в днях: %s</string>
+    <string name="loan_amount">Сумма займа, в рублях: %s</string>
+    <string name="loan_phone_number">Номер телефона: %s</string>
     <string name="message_you_have_no_loans">На данный момент у Вас нет никаких займов</string>
 </resources>

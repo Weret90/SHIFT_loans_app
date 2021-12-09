@@ -10,6 +10,8 @@ class LoansAdapter : RecyclerView.Adapter<LoansViewHolder>() {
 
     private var loans = listOf<Loan>()
 
+    var onLoanItemClickListener: ((Loan) -> Unit)? = null
+
     fun setData(loans: List<Loan>) {
         this.loans = loans
         notifyDataSetChanged()
@@ -22,6 +24,9 @@ class LoansAdapter : RecyclerView.Adapter<LoansViewHolder>() {
 
     override fun onBindViewHolder(holder: LoansViewHolder, position: Int) {
         holder.bind(loans[position])
+        holder.itemView.setOnClickListener {
+            onLoanItemClickListener?.invoke(loans[position])
+        }
     }
 
     override fun getItemCount(): Int {

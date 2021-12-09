@@ -19,7 +19,7 @@ class LoansViewHolder(private val binding: ItemLoanBinding) :
             binding.root.resources.getString(R.string.loan_status), loan.state
         )
         binding.loanAmount.text = String.format(
-            binding.root.resources.getString(R.string.loan_amount), loan.amount
+            binding.root.resources.getString(R.string.loan_amount_in_item), loan.amount
         )
     }
 

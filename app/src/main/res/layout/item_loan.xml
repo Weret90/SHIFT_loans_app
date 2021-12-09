@@ -31,7 +31,7 @@
             android:id="@+id/loan_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/loan_amount"
+            android:text="@string/loan_amount_in_item"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/loan_status"

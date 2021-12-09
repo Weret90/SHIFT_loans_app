@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
+import com.umbrella.ermolaevshiftapp.R
 import com.umbrella.ermolaevshiftapp.data.network.RetrofitInstance
 import com.umbrella.ermolaevshiftapp.data.repository.LoansRepositoryImpl
 import com.umbrella.ermolaevshiftapp.databinding.FragmentLoansBinding
@@ -60,6 +61,13 @@ class LoansFragment : Fragment() {
 
         val token = requireArguments().getString(KEY_TOKEN, "")
         viewModel.getAllLoans(token)
+
+        loansAdapter.onLoanItemClickListener = {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main_container, LoanDetailFragment.newInstance(it))
+                .addToBackStack(null)
+                .commit()
+        }
 
         viewModel.success.observe(viewLifecycleOwner) {
             loansAdapter.setData(it)
