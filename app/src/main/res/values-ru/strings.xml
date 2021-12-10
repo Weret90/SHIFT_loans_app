@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ermolaev SHIFT App</string>
+    <string name="hint_name_input_field">Введите имя</string>
+    <string name="hint_password_input_field">Введите пароль</string>
+    <string name="btn_to_register_text">Зарегистрироваться</string>
+    <string name="btn_enter_text">Войти</string>
+    <string name="condition_percent">Процент: %s</string>
+    <string name="condition_period">Период: %s</string>
+    <string name="condition_max_amount">Максимальная сумма: %s</string>
+    <string name="label_loan_conditions">Условия займа:</string>
+    <string name="welcome_text_view">Приветствуем Вас, %s!</string>
+    <string name="hint_percent_et">Введите процент</string>
+    <string name="hint_period_et">Введите период</string>
+    <string name="hint_amount_et">Введите сумму</string>
+    <string name="button_create_loan">Оформить займ</string>
+    <string name="hint_phone_number_et">Введите номер телефона</string>
+    <string name="hint_name_et">Введите имя</string>
+    <string name="hint_last_name_et">Введите фамилию</string>
+    <string name="button_my_loans">Мои займы</string>
+    <string name="loan_date">Дата оформления: %s</string>
+    <string name="loan_status">Статус займа: %s</string>
+    <string name="loan_amount_in_item">%s руб.</string>
+    <string name="loan_id">Номер займа: %s</string>
+    <string name="loan_first_name">Имя оформителя: %s</string>
+    <string name="loan_last_name">Фамилия оформителя: %s</string>
+    <string name="loan_percent">Процент займа: %s</string>
+    <string name="loan_period">Период, в днях: %s</string>
+    <string name="loan_amount">Сумма займа, в рублях: %s</string>
+    <string name="loan_phone_number">Номер телефона: %s</string>
+    <string name="message_you_have_no_loans">На данный момент у Вас нет никаких займов</string>
+    <string name="snackbar_action_text">Reload</string>
+    <string name="terms_of_filling">Все поля должны быть заполнены, дробным может быть только процент, поля не должны содержать пробелы</string>
+    <string name="localization_button_text">RU</string>
+</resources>

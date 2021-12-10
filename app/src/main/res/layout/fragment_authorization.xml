@@ -16,8 +16,8 @@
     <LinearLayout
         android:id="@+id/authorization_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="vertical">
 
         <EditText
@@ -52,5 +52,14 @@
             android:text="@string/btn_to_register_text" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/localization_button"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:text="@string/localization_button_text"
+        android:textStyle="bold" />
 
 </FrameLayout>
