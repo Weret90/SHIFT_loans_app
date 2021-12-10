@@ -19,7 +19,7 @@ class RegistrationViewModel(private val toRegisterUseCase: ToRegisterUseCase) : 
     val registrationLiveData: LiveData<State<User>> get() = _registrationLiveData
 
     companion object {
-        private const val ERROR_INPUT_DATA = "Введите корректные имя и пароль"
+        private const val ERROR_EMPTY_FIELDS = "All fields must be filled"
     }
 
     fun toRegister(name: String, password: String) {
@@ -44,7 +44,7 @@ class RegistrationViewModel(private val toRegisterUseCase: ToRegisterUseCase) : 
                 }
             }
         } else {
-            _registrationLiveData.value = State.Error(ERROR_INPUT_DATA)
+            _registrationLiveData.value = State.Error(ERROR_EMPTY_FIELDS)
         }
     }
 

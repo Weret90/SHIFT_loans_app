@@ -20,7 +20,7 @@ class AuthorizationViewModel(
     val authorizationLiveData: LiveData<State<Pair<Auth, String>>> get() = _authorizationLiveData
 
     companion object {
-        private const val ERROR_INPUT_DATA = "Введите корректные имя и пароль"
+        private const val ERROR_EMPTY_FIELDS = "All fields must be filled"
     }
 
     fun toEnter(name: String, password: String) {
@@ -45,7 +45,7 @@ class AuthorizationViewModel(
                 }
             }
         } else {
-            _authorizationLiveData.value = State.Error(ERROR_INPUT_DATA)
+            _authorizationLiveData.value = State.Error(ERROR_EMPTY_FIELDS)
         }
     }
 

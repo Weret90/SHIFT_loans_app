@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    android:layout_margin="@dimen/default_margin">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="8dp">
+        android:layout_margin="@dimen/default_margin">
 
         <TextView
             android:id="@+id/loan_date"
@@ -22,7 +22,7 @@
             android:id="@+id/loan_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/default_margin"
             android:text="@string/loan_status"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/loan_date" />
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/loan_amount_in_item"
-            android:textSize="24sp"
+            android:textSize="@dimen/big_text_size"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/loan_status"
             app:layout_constraintEnd_toEndOf="parent"

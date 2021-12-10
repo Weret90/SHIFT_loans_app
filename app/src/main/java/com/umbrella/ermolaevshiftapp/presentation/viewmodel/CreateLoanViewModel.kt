@@ -29,9 +29,8 @@ class CreateLoanViewModel(
     val getLoanConditionsLiveData: LiveData<State<LoanConditions>> get() = _getLoanConditionsLiveData
 
     companion object {
-        private const val ERROR_INPUT_DATA =
-            "Введены некорректные данные. Дробным может быть только процент, числа не должны содержать пробелы"
-        private const val ERROR_EMPTY_FIELDS = "Некоторые поля не заполнены, заполните все поля"
+        private const val ERROR_INPUT_DATA = "Incorrect input data"
+        private const val ERROR_EMPTY_FIELDS = "All fields must be filled"
     }
 
     fun getLoanConditions(token: String) {
@@ -64,11 +63,13 @@ class CreateLoanViewModel(
         period: String,
         phoneNumber: String,
     ) {
-        _createLoanLiveData.value = State.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val loanRequest =
                     parseInputData(firstName, lastName, amount, percent, period, phoneNumber)
+                withContext(Dispatchers.Main) {
+                    _createLoanLiveData.value = State.Loading
+                }
                 val loan = createLoanUseCase(token, loanRequest)
                 withContext(Dispatchers.Main) {
                     _createLoanLiveData.value = State.Success(loan)

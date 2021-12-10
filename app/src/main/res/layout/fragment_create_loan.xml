@@ -10,7 +10,7 @@
         android:id="@+id/loan_conditions_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/default_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -18,30 +18,30 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/default_margin"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/label_loan_conditions"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/label_loan_conditions" />
 
             <TextView
                 android:id="@+id/condition_percent"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/condition_percent" />
 
             <TextView
                 android:id="@+id/condition_period"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/condition_period" />
 
             <TextView
                 android:id="@+id/condition_max_amount"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/condition_max_amount" />
 
@@ -53,7 +53,7 @@
         android:id="@+id/create_loan_input_fields"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/default_margin"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +64,6 @@
             android:id="@+id/name_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:hint="@string/hint_name_et"
             android:importantForAutofill="no"
             android:inputType="textPersonName" />
@@ -73,7 +72,6 @@
             android:id="@+id/last_name_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:hint="@string/hint_last_name_et"
             android:importantForAutofill="no"
             android:inputType="textPersonName" />
@@ -82,7 +80,6 @@
             android:id="@+id/percent_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:hint="@string/hint_percent_et"
             android:importantForAutofill="no"
             android:inputType="numberDecimal" />
@@ -91,7 +88,6 @@
             android:id="@+id/period_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:hint="@string/hint_period_et"
             android:importantForAutofill="no"
             android:inputType="number" />
@@ -100,7 +96,6 @@
             android:id="@+id/amount_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:hint="@string/hint_amount_et"
             android:importantForAutofill="no"
             android:inputType="number" />
@@ -110,16 +105,22 @@
             android:id="@+id/phone_number_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:hint="@string/hint_phone_number_et"
             android:importantForAutofill="no"
             android:inputType="phone" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="@string/terms_of_filling" />
 
         <Button
             android:id="@+id/button_create_loan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/default_margin"
             android:text="@string/button_create_loan" />
     </LinearLayout>
 

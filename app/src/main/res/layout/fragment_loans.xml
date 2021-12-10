@@ -20,7 +20,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/message_you_have_no_loans"
-        android:textSize="24sp"
+        android:textSize="@dimen/big_text_size"
         android:visibility="gone" />
 
     <ProgressBar

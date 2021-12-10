@@ -78,12 +78,10 @@ class LoansFragment : Fragment() {
             when (state) {
                 is State.Loading -> {
                     loadingBar.show()
-                    loansRv.hide()
                     emptyLoansListTv.hide()
                 }
                 is State.Success -> {
                     loadingBar.hide()
-                    loansRv.show()
                     if (state.data.isEmpty()) {
                         emptyLoansListTv.show()
                     } else {
@@ -92,7 +90,6 @@ class LoansFragment : Fragment() {
                 }
                 is State.Error -> {
                     loadingBar.hide()
-                    loansRv.show()
                     root.showSnackBar(
                         state.errorMessage, getString(R.string.snackbar_action_text)
                     ) { viewModel.getAllLoans(token) }
