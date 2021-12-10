@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.umbrella.ermolaevshiftapp.databinding.FragmentRegistrationBinding
 import com.umbrella.ermolaevshiftapp.domain.entity.User
 import com.umbrella.ermolaevshiftapp.presentation.State
+import com.umbrella.ermolaevshiftapp.presentation.hide
+import com.umbrella.ermolaevshiftapp.presentation.show
+import com.umbrella.ermolaevshiftapp.presentation.showToast
 import com.umbrella.ermolaevshiftapp.presentation.viewmodel.RegistrationViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -50,28 +52,24 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun renderData(state: State<User>) {
-        when (state) {
-            is State.Loading -> {
-                binding.loadingBar.visibility = View.VISIBLE
-                binding.registrationLayout.visibility = View.GONE
-            }
-            is State.Success<User> -> {
-                binding.loadingBar.visibility = View.GONE
-                binding.registrationLayout.visibility = View.VISIBLE
-                showToast("Регистрация прошла успешно: ${state.data}")
-                parentFragmentManager.popBackStack()
-            }
-            is State.Error -> {
-                binding.loadingBar.visibility = View.GONE
-                binding.registrationLayout.visibility = View.VISIBLE
-                showToast(state.errorMessage)
+        with(binding) {
+            when (state) {
+                is State.Loading -> {
+                    loadingBar.show()
+                    registrationLayout.hide()
+                }
+                is State.Success<User> -> {
+                    context.showToast("Регистрация прошла успешно: ${state.data}")
+                    parentFragmentManager.popBackStack()
+                }
+                is State.Error -> {
+                    loadingBar.hide()
+                    registrationLayout.show()
+                    context.showToast(state.errorMessage)
+                }
             }
         }
         viewModel.clearRegistrationLiveData()
-    }
-
-    private fun showToast(text: String?) {
-        Toast.makeText(context, text, Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {

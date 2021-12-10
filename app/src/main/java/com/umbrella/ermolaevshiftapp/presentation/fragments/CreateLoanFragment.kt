@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.google.android.material.snackbar.Snackbar
 import com.umbrella.ermolaevshiftapp.R
 import com.umbrella.ermolaevshiftapp.databinding.FragmentCreateLoanBinding
 import com.umbrella.ermolaevshiftapp.domain.entity.Loan
 import com.umbrella.ermolaevshiftapp.domain.entity.LoanConditions
-import com.umbrella.ermolaevshiftapp.presentation.State
+import com.umbrella.ermolaevshiftapp.presentation.*
 import com.umbrella.ermolaevshiftapp.presentation.viewmodel.CreateLoanViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -20,7 +18,9 @@ class CreateLoanFragment : Fragment() {
     private var _binding: FragmentCreateLoanBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var token: String
+    private val token: String by lazy {
+        requireArguments().getString(KEY_TOKEN, "")
+    }
 
     private val viewModel by viewModel<CreateLoanViewModel>()
 
@@ -37,11 +37,6 @@ class CreateLoanFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        token = requireArguments().getString(KEY_TOKEN, "")
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -56,15 +51,17 @@ class CreateLoanFragment : Fragment() {
         viewModel.getLoanConditions(token)
 
         binding.buttonCreateLoan.setOnClickListener {
-            viewModel.createLoan(
-                token,
-                binding.nameEt.text.toString(),
-                binding.lastNameEt.text.toString(),
-                binding.amountEt.text.toString(),
-                binding.percentEt.text.toString(),
-                binding.periodEt.text.toString(),
-                binding.phoneNumberEt.text.toString()
-            )
+            with(binding) {
+                viewModel.createLoan(
+                    token,
+                    nameEt.getStringText(),
+                    lastNameEt.getStringText(),
+                    amountEt.getStringText(),
+                    percentEt.getStringText(),
+                    periodEt.getStringText(),
+                    phoneNumberEt.getStringText()
+                )
+            }
         }
 
         viewModel.getLoanConditionsLiveData.observe(viewLifecycleOwner) { getLoanConditionsState ->
@@ -81,69 +78,59 @@ class CreateLoanFragment : Fragment() {
     }
 
     private fun renderDataCreateLoan(state: State<Loan>) {
-        when (state) {
-            is State.Loading -> {
-                binding.createLoanInputFields.visibility = View.GONE
-                binding.loadingBar.visibility = View.VISIBLE
-            }
-            is State.Success -> {
-                binding.createLoanInputFields.visibility = View.VISIBLE
-                binding.loadingBar.visibility = View.GONE
-                showToast("Займ №${state.data.id} успешно оформлен!")
-                parentFragmentManager.popBackStack()
-            }
-            is State.Error -> {
-                binding.createLoanInputFields.visibility = View.VISIBLE
-                binding.loadingBar.visibility = View.GONE
-                showToast(state.errorMessage)
+        with(binding) {
+            when (state) {
+                is State.Loading -> {
+                    loadingBar.show()
+                    createLoanInputFields.hide()
+                    loanConditionsCardView.hide()
+                }
+                is State.Success -> {
+                    context.showToast("Займ №${state.data.id} успешно оформлен!")
+                    parentFragmentManager.popBackStack()
+                }
+                is State.Error -> {
+                    loadingBar.hide()
+                    createLoanInputFields.show()
+                    loanConditionsCardView.show()
+                    context.showToast(state.errorMessage)
+                }
             }
         }
         viewModel.clearCreateLoanLiveData()
     }
 
     private fun renderDataLoanConditions(state: State<LoanConditions>) {
-        when (state) {
-            is State.Loading -> {
-                binding.loadingBar.visibility = View.VISIBLE
-                binding.createLoanInputFields.visibility = View.GONE
-                binding.loanConditionsCardView.visibility = View.GONE
-            }
-            is State.Success -> {
-                binding.loadingBar.visibility = View.GONE
-                binding.createLoanInputFields.visibility = View.VISIBLE
-                binding.loanConditionsCardView.visibility = View.VISIBLE
-                binding.conditionPercent.text = String.format(
-                    getString(R.string.condition_percent),
-                    state.data.percent.toString()
-                )
-                binding.conditionPeriod.text = String.format(
-                    getString(R.string.condition_period),
-                    state.data.period.toString()
-                )
-                binding.conditionMaxAmount.text = String.format(
-                    getString(R.string.condition_max_amount),
-                    state.data.maxAmount.toString()
-                )
-            }
-            is State.Error -> {
-                binding.loadingBar.visibility = View.GONE
-                showSnackBar(state.errorMessage)
+        with(binding) {
+            when (state) {
+                is State.Loading -> {
+                    loadingBar.show()
+                    createLoanInputFields.hide()
+                    loanConditionsCardView.hide()
+                }
+                is State.Success -> {
+                    loadingBar.hide()
+                    createLoanInputFields.show()
+                    loanConditionsCardView.show()
+                    conditionPercent.text = String.format(
+                        getString(R.string.condition_percent), state.data.percent.toString()
+                    )
+                    conditionPeriod.text = String.format(
+                        getString(R.string.condition_period), state.data.period.toString()
+                    )
+                    conditionMaxAmount.text = String.format(
+                        getString(R.string.condition_max_amount), state.data.maxAmount.toString()
+                    )
+                }
+                is State.Error -> {
+                    loadingBar.hide()
+                    root.showSnackBar(
+                        state.errorMessage, getString(R.string.snackbar_action_text)
+                    ) { viewModel.getLoanConditions(token) }
+                }
             }
         }
         viewModel.clearGetLoanConditionsLiveData()
-    }
-
-    private fun showToast(text: String?) {
-        Toast.makeText(context, text, Toast.LENGTH_LONG).show()
-    }
-
-    private fun showSnackBar(text: String?) {
-        text?.let {
-            Snackbar.make(binding.root, text, Snackbar.LENGTH_INDEFINITE)
-                .setAction(getString(R.string.snackbar_action_text)) {
-                    viewModel.getLoanConditions(token)
-                }.show()
-        }
     }
 
     override fun onDestroyView() {

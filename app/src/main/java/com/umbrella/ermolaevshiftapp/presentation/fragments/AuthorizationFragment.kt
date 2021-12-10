@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.umbrella.ermolaevshiftapp.R
 import com.umbrella.ermolaevshiftapp.databinding.FragmentAuthorizationBinding
 import com.umbrella.ermolaevshiftapp.domain.entity.Auth
 import com.umbrella.ermolaevshiftapp.presentation.State
+import com.umbrella.ermolaevshiftapp.presentation.hide
+import com.umbrella.ermolaevshiftapp.presentation.show
+import com.umbrella.ermolaevshiftapp.presentation.showToast
 import com.umbrella.ermolaevshiftapp.presentation.viewmodel.AuthorizationViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -52,31 +54,27 @@ class AuthorizationFragment : Fragment() {
     }
 
     private fun renderData(state: State<Pair<Auth, String>>) {
-        when (state) {
-            is State.Loading -> {
-                binding.loadingBar.visibility = View.VISIBLE
-                binding.authorizationLayout.visibility = View.GONE
-            }
-            is State.Success -> {
-                binding.loadingBar.visibility = View.GONE
-                binding.authorizationLayout.visibility = View.VISIBLE
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.main_container,
-                        MainFragment.newInstance(state.data.first.name, state.data.second))
-                    .addToBackStack(null)
-                    .commit()
-            }
-            is State.Error -> {
-                binding.loadingBar.visibility = View.GONE
-                binding.authorizationLayout.visibility = View.VISIBLE
-                showToast(state.errorMessage)
+        with(binding) {
+            when (state) {
+                is State.Loading -> {
+                    loadingBar.show()
+                    authorizationLayout.hide()
+                }
+                is State.Success -> {
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.main_container,
+                            MainFragment.newInstance(state.data.first.name, state.data.second))
+                        .addToBackStack(null)
+                        .commit()
+                }
+                is State.Error -> {
+                    loadingBar.hide()
+                    authorizationLayout.show()
+                    context.showToast(state.errorMessage)
+                }
             }
         }
         viewModel.clearAuthorizationLiveData()
-    }
-
-    private fun showToast(text: String?) {
-        Toast.makeText(context, text, Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {

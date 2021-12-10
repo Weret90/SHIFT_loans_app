@@ -8,10 +8,9 @@ import androidx.fragment.app.Fragment
 import com.umbrella.ermolaevshiftapp.R
 import com.umbrella.ermolaevshiftapp.databinding.FragmentLoanDetailBinding
 import com.umbrella.ermolaevshiftapp.domain.entity.Loan
+import com.umbrella.ermolaevshiftapp.presentation.convertTime
 import com.umbrella.ermolaevshiftapp.presentation.mapper.toPresentationModel
 import com.umbrella.ermolaevshiftapp.presentation.model.LoanPresentationModel
-import java.text.SimpleDateFormat
-import java.util.*
 
 class LoanDetailFragment : Fragment() {
 
@@ -56,16 +55,9 @@ class LoanDetailFragment : Fragment() {
                     String.format(getString(R.string.loan_period), loan.period.toString())
                 loanAmount.text =
                     String.format(getString(R.string.loan_amount), loan.amount.toString())
-                loanStatus.text =
-                    String.format(getString(R.string.loan_status), loan.state)
+                loanStatus.text = String.format(getString(R.string.loan_status), loan.state)
             }
         }
-    }
-
-    private fun convertTime(time: String): String {
-        val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-        val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
-        return formatter.format(parser.parse(time))
     }
 
     override fun onDestroyView() {
