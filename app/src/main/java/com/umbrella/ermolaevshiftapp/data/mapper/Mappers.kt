@@ -43,3 +43,15 @@ fun LoanDataModel.toDomainModel() = Loan(
 fun List<LoanDataModel>.toDomainModel() = this.map {
     it.toDomainModel()
 }
+
+fun PersonDataModel.toDomainModel() = Person(
+    login,
+    firstName,
+    lastName
+)
+
+fun Person.toDataModel() = PersonDataModel(
+    login,
+    firstName,
+    lastName
+)

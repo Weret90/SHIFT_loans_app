@@ -22,16 +22,22 @@ class CreateLoanFragment : Fragment() {
         requireArguments().getString(KEY_TOKEN, "")
     }
 
+    private val login: String by lazy {
+        requireArguments().getString(KEY_LOGIN, "")
+    }
+
     private val viewModel by viewModel<CreateLoanViewModel>()
 
     companion object {
 
         private const val KEY_TOKEN = "token"
+        private const val KEY_LOGIN = "login"
 
-        fun newInstance(token: String): CreateLoanFragment {
+        fun newInstance(token: String, login: String): CreateLoanFragment {
             return CreateLoanFragment().apply {
                 arguments = Bundle().apply {
                     putString(KEY_TOKEN, token)
+                    putString(KEY_LOGIN, login)
                 }
             }
         }
@@ -50,10 +56,13 @@ class CreateLoanFragment : Fragment() {
 
         viewModel.getLoanConditions(token)
 
+        viewModel.tryToFindPersonInDatabaseByLogin(login)
+
         binding.buttonCreateLoan.setOnClickListener {
             with(binding) {
                 viewModel.createLoan(
                     token,
+                    login,
                     nameEt.getStringText(),
                     lastNameEt.getStringText(),
                     amountEt.getStringText(),
@@ -61,6 +70,13 @@ class CreateLoanFragment : Fragment() {
                     periodEt.getStringText(),
                     phoneNumberEt.getStringText()
                 )
+            }
+        }
+
+        viewModel.ifPersonExistInDatabaseLiveData.observe(viewLifecycleOwner) { person ->
+            person?.let {
+                binding.nameEt.setText(person.firstName)
+                binding.lastNameEt.setText(person.lastName)
             }
         }
 

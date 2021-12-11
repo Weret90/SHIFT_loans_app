@@ -25,5 +25,13 @@ object DomainDi {
         factory {
             ToRegisterUseCase(repository = get())
         }
+
+        factory {
+            GetPersonUseCase(repository = get())
+        }
+
+        factory {
+            InsertPersonUseCase(repository = get())
+        }
     }
 }

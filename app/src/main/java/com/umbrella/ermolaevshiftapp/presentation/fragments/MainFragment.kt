@@ -16,13 +16,13 @@ class MainFragment : Fragment() {
     companion object {
 
         private const val KEY_TOKEN = "token"
-        private const val KEY_NAME = "name"
+        private const val KEY_LOGIN = "login"
 
         fun newInstance(name: String, token: String): MainFragment {
             return MainFragment().apply {
                 arguments = Bundle().apply {
                     putString(KEY_TOKEN, token)
-                    putString(KEY_NAME, name)
+                    putString(KEY_LOGIN, name)
                 }
             }
         }
@@ -44,14 +44,14 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val name = requireArguments().getString(KEY_NAME, "")
-        binding.welcomeTextView.text = String.format(getString(R.string.welcome_text_view), name)
+        val login = requireArguments().getString(KEY_LOGIN, "")
+        binding.welcomeTextView.text = String.format(getString(R.string.welcome_text_view), login)
 
         val token = requireArguments().getString(KEY_TOKEN, "")
 
         binding.buttonCreateLoan.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.main_container, CreateLoanFragment.newInstance(token))
+                .replace(R.id.main_container, CreateLoanFragment.newInstance(token, login))
                 .addToBackStack(null)
                 .commit()
         }

@@ -16,7 +16,12 @@ object PresentationDi {
         }
 
         viewModel {
-            CreateLoanViewModel(getLoanConditionsUseCase = get(), createLoanUseCase = get())
+            CreateLoanViewModel(
+                getLoanConditionsUseCase = get(),
+                createLoanUseCase = get(),
+                getPersonUseCase = get(),
+                insertPersonUseCase = get()
+            )
         }
 
         viewModel {
