@@ -51,6 +51,9 @@ class LoanDetailFragment : Fragment() {
                 LoanStatus.REJECTED.name -> {
                     binding.loanStatus.setTextColor(Color.RED)
                 }
+                LoanStatus.REGISTERED.name -> {
+                    binding.loanStatus.setTextColor(Color.BLUE)
+                }
             }
 
             with(binding) {

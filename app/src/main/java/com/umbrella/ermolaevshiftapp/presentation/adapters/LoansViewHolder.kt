@@ -21,6 +21,9 @@ class LoansViewHolder(private val binding: ItemLoanBinding) :
             LoanStatus.REJECTED.name -> {
                 binding.loanStatus.setTextColor(Color.RED)
             }
+            LoanStatus.REGISTERED.name -> {
+                binding.loanStatus.setTextColor(Color.BLUE)
+            }
         }
 
         binding.loanDate.text = String.format(

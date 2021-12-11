@@ -21,7 +21,7 @@ class CreateLoanViewModel(
     private val getLoanConditionsUseCase: GetLoanConditionsUseCase,
     private val createLoanUseCase: CreateLoanUseCase,
     private val getPersonUseCase: GetPersonUseCase,
-    private val insertPersonUseCase: InsertPersonUseCase
+    private val insertPersonUseCase: InsertPersonUseCase,
 ) : ViewModel() {
 
     private val _ifPersonExistInDatabaseLiveData = MutableLiveData<Person>()
@@ -123,6 +123,8 @@ class CreateLoanViewModel(
             && period.isNotBlank()
             && phoneNumber.isNotBlank()
         ) {
+            firstName.forEach { if (it.isDigit()) throw RuntimeException(ERROR_INPUT_DATA) }
+            lastName.forEach { if (it.isDigit()) throw RuntimeException(ERROR_INPUT_DATA) }
             return LoanRequest(
                 amount.trim().toInt(),
                 firstName.trim(),

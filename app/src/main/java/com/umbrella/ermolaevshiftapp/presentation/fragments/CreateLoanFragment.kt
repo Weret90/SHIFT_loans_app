@@ -102,7 +102,9 @@ class CreateLoanFragment : Fragment() {
                     loanConditionsCardView.hide()
                 }
                 is State.Success -> {
-                    context.showToast("Займ №${state.data.id} успешно оформлен!")
+                    context.showToast(
+                        String.format(getString(R.string.loan_successfully_created), state.data.id)
+                    )
                     parentFragmentManager.popBackStack()
                 }
                 is State.Error -> {

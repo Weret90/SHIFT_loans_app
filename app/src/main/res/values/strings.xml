@@ -30,8 +30,9 @@
     <string name="loan_information">For more information, please contact the nearest CFT office</string>
     <string name="message_you_have_no_loans">You do not have any loans at the moment</string>
     <string name="snackbar_action_text">Reload</string>
-    <string name="terms_of_filling">All fields must be filled in, only a percentage can be fractional, fields must not contain spaces</string>
+    <string name="terms_of_filling">All fields must be filled in, only a percentage can be fractional, fields must not contain spaces, name and lastname must not contain numbers</string>
     <string name="localization_button_text">EN</string>
     <string name="notification_title">Important notice</string>
     <string name="notification_text">Remember to pay your loans on time</string>
+    <string name="loan_successfully_created">Loan №%s has been successfully completed</string>
 </resources>
