@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.work.ExistingWorkPolicy
+import androidx.work.WorkManager
 import com.umbrella.ermolaevshiftapp.R
 import com.umbrella.ermolaevshiftapp.databinding.FragmentLoansBinding
 import com.umbrella.ermolaevshiftapp.domain.entity.Loan
-import com.umbrella.ermolaevshiftapp.presentation.State
+import com.umbrella.ermolaevshiftapp.presentation.*
 import com.umbrella.ermolaevshiftapp.presentation.adapters.LoansAdapter
-import com.umbrella.ermolaevshiftapp.presentation.hide
-import com.umbrella.ermolaevshiftapp.presentation.show
-import com.umbrella.ermolaevshiftapp.presentation.showSnackBar
 import com.umbrella.ermolaevshiftapp.presentation.viewmodel.LoansViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -34,6 +33,7 @@ class LoansFragment : Fragment() {
     companion object {
 
         private const val KEY_TOKEN = "token"
+        private const val NOTIFICATION_ABOUT_LOANS_WORK = "notificationAboutLoans"
 
         fun newInstance(token: String): LoansFragment {
             return LoansFragment().apply {
@@ -86,6 +86,7 @@ class LoansFragment : Fragment() {
                         emptyLoansListTv.show()
                     } else {
                         loansAdapter.setData(state.data)
+                        startNotificationBackgroundTask()
                     }
                 }
                 is State.Error -> {
@@ -102,5 +103,13 @@ class LoansFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun startNotificationBackgroundTask() {
+        WorkManager.getInstance(requireActivity()).enqueueUniqueWork(
+            NOTIFICATION_ABOUT_LOANS_WORK,
+            ExistingWorkPolicy.REPLACE,
+            NotificationWorker.makeRequest()
+        )
     }
 }

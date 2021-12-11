@@ -32,4 +32,6 @@
     <string name="snackbar_action_text">Reload</string>
     <string name="terms_of_filling">Все поля должны быть заполнены, дробным может быть только процент, поля не должны содержать пробелы</string>
     <string name="localization_button_text">RU</string>
+    <string name="notification_title">Важное уведомление</string>
+    <string name="notification_text">Не забывайте вовремя оплачивать займы</string>
 </resources>
