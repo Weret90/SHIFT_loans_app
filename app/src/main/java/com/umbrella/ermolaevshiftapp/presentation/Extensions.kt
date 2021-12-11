@@ -8,8 +8,7 @@ import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.*
 
-private const val PARSER_PATTERN = "yyyy-MM-dd'T'HH:mm:ss"
-private const val FORMATTER_PATTERN = "dd.MM.yyyy HH:mm"
+private const val DATE_PATTERN = "dd.MM.yy HH:mm"
 
 fun View.showSnackBar(text: String?, actionText: String, action: (View) -> Unit) {
     Snackbar.make(this, text.toString(), Snackbar.LENGTH_INDEFINITE)
@@ -32,8 +31,7 @@ fun EditText.getStringText(): String {
     return this.text.toString()
 }
 
-fun convertTime(time: String): String {
-    val parser = SimpleDateFormat(PARSER_PATTERN, Locale.getDefault())
-    val formatter = SimpleDateFormat(FORMATTER_PATTERN, Locale.getDefault())
-    return formatter.format(parser.parse(time))
+fun Date.convertToString(): String {
+    val sdf = SimpleDateFormat(DATE_PATTERN, Locale.getDefault())
+    return sdf.format(this)
 }

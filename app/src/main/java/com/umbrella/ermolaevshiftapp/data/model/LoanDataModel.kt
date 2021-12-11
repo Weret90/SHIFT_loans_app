@@ -1,12 +1,13 @@
 package com.umbrella.ermolaevshiftapp.data.model
 
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
 data class LoanDataModel(
     @SerializedName("amount")
     val amount: Int,
     @SerializedName("date")
-    val date: String,
+    val date: Date,
     @SerializedName("firstName")
     val firstName: String,
     @SerializedName("id")

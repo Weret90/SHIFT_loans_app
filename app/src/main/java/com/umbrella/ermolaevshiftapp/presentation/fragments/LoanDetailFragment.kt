@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.umbrella.ermolaevshiftapp.R
 import com.umbrella.ermolaevshiftapp.databinding.FragmentLoanDetailBinding
 import com.umbrella.ermolaevshiftapp.domain.entity.Loan
-import com.umbrella.ermolaevshiftapp.presentation.convertTime
+import com.umbrella.ermolaevshiftapp.presentation.convertToString
 import com.umbrella.ermolaevshiftapp.presentation.mapper.toPresentationModel
 import com.umbrella.ermolaevshiftapp.presentation.model.LoanPresentationModel
 
@@ -43,7 +43,8 @@ class LoanDetailFragment : Fragment() {
         requireArguments().getParcelable<LoanPresentationModel>(KEY_LOAN)?.let { loan ->
             with(binding) {
                 loanId.text = String.format(getString(R.string.loan_id), loan.id.toString())
-                loanDate.text = String.format(getString(R.string.loan_date), convertTime(loan.date))
+                loanDate.text =
+                    String.format(getString(R.string.loan_date), loan.date.convertToString())
                 loanFirstName.text =
                     String.format(getString(R.string.loan_first_name), loan.firstName)
                 loanLastName.text = String.format(getString(R.string.loan_last_name), loan.lastName)
