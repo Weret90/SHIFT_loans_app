@@ -20,13 +20,14 @@
     <string name="loan_date">Date of registration: %s</string>
     <string name="loan_status">Loan status: %s</string>
     <string name="loan_amount_in_item">%s rub.</string>
-    <string name="loan_id">Loan number: %s</string>
+    <string name="loan_id">Loan №: %s</string>
     <string name="loan_first_name">First name: %s</string>
     <string name="loan_last_name">Last name: %s</string>
     <string name="loan_percent">Loan percentage: %s</string>
     <string name="loan_period">Period, in days: %s</string>
     <string name="loan_amount">Loan amount, in rubles: %s</string>
     <string name="loan_phone_number">Phone number: %s</string>
+    <string name="loan_information">For more information, please contact the nearest CFT office</string>
     <string name="message_you_have_no_loans">You do not have any loans at the moment</string>
     <string name="snackbar_action_text">Reload</string>
     <string name="terms_of_filling">All fields must be filled in, only a percentage can be fractional, fields must not contain spaces</string>

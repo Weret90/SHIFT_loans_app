@@ -1,5 +1,6 @@
 package com.umbrella.ermolaevshiftapp.presentation.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.umbrella.ermolaevshiftapp.R
 import com.umbrella.ermolaevshiftapp.databinding.FragmentLoanDetailBinding
 import com.umbrella.ermolaevshiftapp.domain.entity.Loan
+import com.umbrella.ermolaevshiftapp.presentation.LoanStatus
 import com.umbrella.ermolaevshiftapp.presentation.convertToString
 import com.umbrella.ermolaevshiftapp.presentation.mapper.toPresentationModel
 import com.umbrella.ermolaevshiftapp.presentation.model.LoanPresentationModel
@@ -41,6 +43,16 @@ class LoanDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireArguments().getParcelable<LoanPresentationModel>(KEY_LOAN)?.let { loan ->
+
+            when (loan.state) {
+                LoanStatus.APPROVED.name -> {
+                    binding.loanStatus.setTextColor(Color.GREEN)
+                }
+                LoanStatus.REJECTED.name -> {
+                    binding.loanStatus.setTextColor(Color.RED)
+                }
+            }
+
             with(binding) {
                 loanId.text = String.format(getString(R.string.loan_id), loan.id.toString())
                 loanDate.text =

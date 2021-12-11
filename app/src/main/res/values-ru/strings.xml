@@ -21,13 +21,14 @@
     <string name="loan_date">Дата оформления: %s</string>
     <string name="loan_status">Статус займа: %s</string>
     <string name="loan_amount_in_item">%s руб.</string>
-    <string name="loan_id">Номер займа: %s</string>
+    <string name="loan_id">Займ №: %s</string>
     <string name="loan_first_name">Имя оформителя: %s</string>
     <string name="loan_last_name">Фамилия оформителя: %s</string>
     <string name="loan_percent">Процент займа: %s</string>
     <string name="loan_period">Период, в днях: %s</string>
     <string name="loan_amount">Сумма займа, в рублях: %s</string>
     <string name="loan_phone_number">Номер телефона: %s</string>
+    <string name="loan_information">За более полной информацией можете обратиться в ближайший офис ЦФТ</string>
     <string name="message_you_have_no_loans">На данный момент у Вас нет никаких займов</string>
     <string name="snackbar_action_text">Reload</string>
     <string name="terms_of_filling">Все поля должны быть заполнены, дробным может быть только процент, поля не должны содержать пробелы</string>
