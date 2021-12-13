@@ -6,7 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.umbrella.ermolaevshiftapp.domain.entity.Auth
 import com.umbrella.ermolaevshiftapp.domain.usecase.GetAuthTokenUseCase
-import com.umbrella.ermolaevshiftapp.presentation.State
+import com.umbrella.ermolaevshiftapp.presentation.state.InputDataError
+import com.umbrella.ermolaevshiftapp.presentation.state.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -18,10 +19,6 @@ class AuthorizationViewModel(
 
     private val _authorizationLiveData = MutableLiveData<State<Pair<Auth, String>>>()
     val authorizationLiveData: LiveData<State<Pair<Auth, String>>> get() = _authorizationLiveData
-
-    companion object {
-        private const val ERROR_EMPTY_FIELDS = "All fields must be filled"
-    }
 
     fun toEnter(name: String, password: String) {
         if (name.isNotBlank() && password.isNotBlank()) {
@@ -35,17 +32,18 @@ class AuthorizationViewModel(
                     }
                 } catch (httpException: HttpException) {
                     withContext(Dispatchers.Main) {
-                        _authorizationLiveData.value =
-                            State.Error(httpException.response()?.errorBody()?.string())
+                        _authorizationLiveData.value = State.Error.ErrorResponse(
+                            httpException.code(), httpException.response()?.errorBody()?.string()
+                        )
                     }
                 } catch (exception: Exception) {
                     withContext(Dispatchers.Main) {
-                        _authorizationLiveData.value = State.Error(exception.message)
+                        _authorizationLiveData.value = State.Error.UnknownError(exception)
                     }
                 }
             }
         } else {
-            _authorizationLiveData.value = State.Error(ERROR_EMPTY_FIELDS)
+            _authorizationLiveData.value = State.Error.InputError(InputDataError.EMPTY_INPUT_DATA)
         }
     }
 

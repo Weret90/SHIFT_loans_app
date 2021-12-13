@@ -36,4 +36,16 @@
     <string name="notification_title">Важное уведомление</string>
     <string name="notification_text">Не забывайте вовремя оплачивать займы</string>
     <string name="loan_successfully_created">Займ №%s успешно оформлен!</string>
+    <string name="registration_success">Регистрация прошла успешно. Ваш уровень доступа: %s</string>
+    <string name="error_user_already_exist">Пользователь с таким логином уже существует</string>
+    <string name="error_failure_registration">Не удалось зарегистрировать пользователя</string>
+    <string name="error_empty_input_data">Все поля должны быть заполнены</string>
+    <string name="unknown_error_check_internet_connection">Неизвестная ошибка. Проверьте соединение с интернетом</string>
+    <string name="error_wrong_password_or_user_not_exist">Неверный пароль либо пользователя с таким логином не существует</string>
+    <string name="error_failure_authorization">Не удалось авторизоваться</string>
+    <string name="error_failure_get_loans_list">Не удалось получить список займов с сервера</string>
+    <string name="error_failure_get_loan_conditions">Не удалось получить условия займа с сервера</string>
+    <string name="error_inconsistency_with_conditions">Несоответствие желаемых условий займа с доступными</string>
+    <string name="error_failure_create_loan">Не удалось оформить займ</string>
+    <string name="error_incorrect_input_data">Некоторые поля заполнены неправильно, внимательно прочитайте условия заполнения полей</string>
 </resources>

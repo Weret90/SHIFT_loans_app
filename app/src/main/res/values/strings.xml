@@ -35,4 +35,16 @@
     <string name="notification_title">Important notice</string>
     <string name="notification_text">Remember to pay your loans on time</string>
     <string name="loan_successfully_created">Loan №%s has been successfully completed</string>
+    <string name="registration_success">Registration was successful. Your access level is: %s</string>
+    <string name="error_user_already_exist">User with this login already exists</string>
+    <string name="error_failure_registration">Failed to register user</string>
+    <string name="error_empty_input_data">All fields must be filled</string>
+    <string name="unknown_error_check_internet_connection">Unknown error. Check your internet connection</string>
+    <string name="error_wrong_password_or_user_not_exist">Invalid password or user with this login does not exist</string>
+    <string name="error_failure_authorization">Authorization failed</string>
+    <string name="error_failure_get_loans_list">Failed to get the list of loans from the server</string>
+    <string name="error_failure_get_loan_conditions">Failed to get loan conditions from server</string>
+    <string name="error_inconsistency_with_conditions">Inconsistency of the desired loan conditions with the available ones</string>
+    <string name="error_failure_create_loan">Loan failed</string>
+    <string name="error_incorrect_input_data">Some of the fields are filled in incorrectly, please read carefully the conditions for filling in the fields</string>
 </resources>

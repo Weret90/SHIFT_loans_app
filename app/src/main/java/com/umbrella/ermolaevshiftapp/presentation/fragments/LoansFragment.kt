@@ -12,6 +12,7 @@ import com.umbrella.ermolaevshiftapp.databinding.FragmentLoansBinding
 import com.umbrella.ermolaevshiftapp.domain.entity.Loan
 import com.umbrella.ermolaevshiftapp.presentation.*
 import com.umbrella.ermolaevshiftapp.presentation.adapters.LoansAdapter
+import com.umbrella.ermolaevshiftapp.presentation.state.State
 import com.umbrella.ermolaevshiftapp.presentation.viewmodel.LoansViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -91,9 +92,7 @@ class LoansFragment : Fragment() {
                 }
                 is State.Error -> {
                     loadingBar.hide()
-                    root.showSnackBar(
-                        state.errorMessage, getString(R.string.snackbar_action_text)
-                    ) { viewModel.getAllLoans(token) }
+                    renderError(state)
                 }
             }
         }
@@ -103,6 +102,32 @@ class LoansFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun renderError(error: State.Error) {
+        when (error) {
+            is State.Error.ErrorResponse -> {
+                context.showToast(error.errorBody)
+                binding.root.showSnackBar(
+                    getString(R.string.error_failure_get_loans_list),
+                    getString(R.string.snackbar_action_text)
+                ) {
+                    viewModel.getAllLoans(token)
+                }
+            }
+            is State.Error.UnknownError -> {
+                context.showToast(error.exception.message)
+                binding.root.showSnackBar(
+                    getString(R.string.unknown_error_check_internet_connection),
+                    getString(R.string.snackbar_action_text)
+                ) {
+                    viewModel.getAllLoans(token)
+                }
+            }
+            is State.Error.InputError -> {
+                //такой ошибки при получении списка займов возникнуть не должно, нет данных которые надо вводить
+            }
+        }
     }
 
     private fun startNotificationBackgroundTask() {

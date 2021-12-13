@@ -10,6 +10,8 @@ import com.umbrella.ermolaevshiftapp.databinding.FragmentCreateLoanBinding
 import com.umbrella.ermolaevshiftapp.domain.entity.Loan
 import com.umbrella.ermolaevshiftapp.domain.entity.LoanConditions
 import com.umbrella.ermolaevshiftapp.presentation.*
+import com.umbrella.ermolaevshiftapp.presentation.state.InputDataError
+import com.umbrella.ermolaevshiftapp.presentation.state.State
 import com.umbrella.ermolaevshiftapp.presentation.viewmodel.CreateLoanViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -111,11 +113,42 @@ class CreateLoanFragment : Fragment() {
                     loadingBar.hide()
                     createLoanInputFields.show()
                     loanConditionsCardView.show()
-                    context.showToast(state.errorMessage)
+                    renderCreateLoanError(state)
                 }
             }
         }
         viewModel.clearCreateLoanLiveData()
+    }
+
+    private fun renderCreateLoanError(error: State.Error) {
+        when (error) {
+            is State.Error.ErrorResponse -> {
+                when (error.errorCode) {
+                    400 -> {
+                        context.showToast(getString(R.string.error_inconsistency_with_conditions))
+                        context.showToast(error.errorBody)
+                    }
+                    else -> {
+                        context.showToast(getString(R.string.error_failure_create_loan))
+                        context.showToast(error.errorBody)
+                    }
+                }
+            }
+            is State.Error.InputError -> {
+                when (error.inputDataError) {
+                    InputDataError.EMPTY_INPUT_DATA -> {
+                        context.showToast(getString(R.string.error_empty_input_data))
+                    }
+                    InputDataError.INCORRECT_INPUT_DATA -> {
+                        context.showToast(getString(R.string.error_incorrect_input_data))
+                    }
+                }
+            }
+            is State.Error.UnknownError -> {
+                context.showToast(getString(R.string.unknown_error_check_internet_connection))
+                context.showToast(error.exception.message)
+            }
+        }
     }
 
     private fun renderDataLoanConditions(state: State<LoanConditions>) {
@@ -142,13 +175,37 @@ class CreateLoanFragment : Fragment() {
                 }
                 is State.Error -> {
                     loadingBar.hide()
-                    root.showSnackBar(
-                        state.errorMessage, getString(R.string.snackbar_action_text)
-                    ) { viewModel.getLoanConditions(token) }
+                    renderLoanConditionsError(state)
                 }
             }
         }
         viewModel.clearGetLoanConditionsLiveData()
+    }
+
+    private fun renderLoanConditionsError(error: State.Error) {
+        when (error) {
+            is State.Error.ErrorResponse -> {
+                context.showToast(error.errorBody)
+                binding.root.showSnackBar(
+                    getString(R.string.error_failure_get_loan_conditions),
+                    getString(R.string.snackbar_action_text)
+                ) {
+                    viewModel.getLoanConditions(token)
+                }
+            }
+            is State.Error.InputError -> {
+                //заполнять поля и проверять их валидность при получении условий займа с сервера не требуется
+            }
+            is State.Error.UnknownError -> {
+                context.showToast(error.exception.message)
+                binding.root.showSnackBar(
+                    getString(R.string.unknown_error_check_internet_connection),
+                    getString(R.string.snackbar_action_text)
+                ) {
+                    viewModel.getLoanConditions(token)
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

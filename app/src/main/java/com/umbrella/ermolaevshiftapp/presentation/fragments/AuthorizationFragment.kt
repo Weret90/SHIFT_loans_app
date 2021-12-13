@@ -10,6 +10,8 @@ import com.umbrella.ermolaevshiftapp.R
 import com.umbrella.ermolaevshiftapp.databinding.FragmentAuthorizationBinding
 import com.umbrella.ermolaevshiftapp.domain.entity.Auth
 import com.umbrella.ermolaevshiftapp.presentation.*
+import com.umbrella.ermolaevshiftapp.presentation.state.InputDataError
+import com.umbrella.ermolaevshiftapp.presentation.state.State
 import com.umbrella.ermolaevshiftapp.presentation.viewmodel.AuthorizationViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -80,7 +82,7 @@ class AuthorizationFragment : Fragment() {
                     loadingBar.hide()
                     authorizationLayout.show()
                     localizationButton.show()
-                    context.showToast(state.errorMessage)
+                    renderError(state)
                 }
             }
         }
@@ -90,6 +92,36 @@ class AuthorizationFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun renderError(error: State.Error) {
+        when (error) {
+            is State.Error.ErrorResponse -> {
+                when (error.errorCode) {
+                    404 -> {
+                        context.showToast(getString(R.string.error_wrong_password_or_user_not_exist))
+                    }
+                    else -> {
+                        context.showToast(getString(R.string.error_failure_authorization))
+                        context.showToast(error.errorBody)
+                    }
+                }
+            }
+            is State.Error.InputError -> {
+                when (error.inputDataError) {
+                    InputDataError.EMPTY_INPUT_DATA -> {
+                        context.showToast(getString(R.string.error_empty_input_data))
+                    }
+                    InputDataError.INCORRECT_INPUT_DATA -> {
+                        //проверять валидность заполнения полей при авторизации в моем приложении не требуется
+                    }
+                }
+            }
+            is State.Error.UnknownError -> {
+                context.showToast(getString(R.string.unknown_error_check_internet_connection))
+                context.showToast(error.exception.message)
+            }
+        }
     }
 
     private fun changeAppLanguage() {

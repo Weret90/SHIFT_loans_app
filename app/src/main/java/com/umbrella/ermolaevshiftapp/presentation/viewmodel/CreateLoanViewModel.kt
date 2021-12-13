@@ -9,13 +9,13 @@ import com.umbrella.ermolaevshiftapp.domain.usecase.InsertPersonUseCase
 import com.umbrella.ermolaevshiftapp.domain.usecase.CreateLoanUseCase
 import com.umbrella.ermolaevshiftapp.domain.usecase.GetLoanConditionsUseCase
 import com.umbrella.ermolaevshiftapp.domain.usecase.GetPersonUseCase
-import com.umbrella.ermolaevshiftapp.presentation.State
+import com.umbrella.ermolaevshiftapp.presentation.state.InputDataError
+import com.umbrella.ermolaevshiftapp.presentation.state.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.lang.NumberFormatException
-import java.lang.RuntimeException
 
 class CreateLoanViewModel(
     private val getLoanConditionsUseCase: GetLoanConditionsUseCase,
@@ -32,11 +32,6 @@ class CreateLoanViewModel(
 
     private val _getLoanConditionsLiveData = MutableLiveData<State<LoanConditions>>()
     val getLoanConditionsLiveData: LiveData<State<LoanConditions>> get() = _getLoanConditionsLiveData
-
-    companion object {
-        private const val ERROR_INPUT_DATA = "Incorrect input data"
-        private const val ERROR_EMPTY_FIELDS = "All fields must be filled"
-    }
 
     fun tryToFindPersonInDatabaseByLogin(login: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -57,12 +52,13 @@ class CreateLoanViewModel(
                 }
             } catch (httpException: HttpException) {
                 withContext(Dispatchers.Main) {
-                    _getLoanConditionsLiveData.value =
-                        State.Error(httpException.response()?.errorBody()?.string())
+                    _getLoanConditionsLiveData.value = State.Error.ErrorResponse(
+                        httpException.code(), httpException.response()?.errorBody()?.string()
+                    )
                 }
             } catch (exception: Exception) {
                 withContext(Dispatchers.Main) {
-                    _getLoanConditionsLiveData.value = State.Error(exception.message)
+                    _getLoanConditionsLiveData.value = State.Error.UnknownError(exception)
                 }
             }
         }
@@ -82,26 +78,35 @@ class CreateLoanViewModel(
             try {
                 val loanRequest =
                     parseInputData(firstName, lastName, amount, percent, period, phoneNumber)
-                withContext(Dispatchers.Main) {
-                    _createLoanLiveData.value = State.Loading
-                }
-                val loan = createLoanUseCase(token, loanRequest)
-                insertPersonUseCase(Person(login, firstName, lastName))
-                withContext(Dispatchers.Main) {
-                    _createLoanLiveData.value = State.Success(loan)
+                if (loanRequest == null) {
+                    withContext(Dispatchers.Main) {
+                        _createLoanLiveData.value =
+                            State.Error.InputError(InputDataError.EMPTY_INPUT_DATA)
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        _createLoanLiveData.value = State.Loading
+                    }
+                    val loan = createLoanUseCase(token, loanRequest)
+                    insertPersonUseCase(Person(login, firstName, lastName))
+                    withContext(Dispatchers.Main) {
+                        _createLoanLiveData.value = State.Success(loan)
+                    }
                 }
             } catch (httpException: HttpException) {
                 withContext(Dispatchers.Main) {
-                    _createLoanLiveData.value =
-                        State.Error(httpException.response()?.errorBody()?.string())
+                    _createLoanLiveData.value = State.Error.ErrorResponse(
+                        httpException.code(), httpException.response()?.errorBody()?.string()
+                    )
                 }
             } catch (numberFormatException: NumberFormatException) {
                 withContext(Dispatchers.Main) {
-                    _createLoanLiveData.value = State.Error(ERROR_INPUT_DATA)
+                    _createLoanLiveData.value =
+                        State.Error.InputError(InputDataError.INCORRECT_INPUT_DATA)
                 }
             } catch (exception: Exception) {
                 withContext(Dispatchers.Main) {
-                    _createLoanLiveData.value = State.Error(exception.message)
+                    _createLoanLiveData.value = State.Error.UnknownError(exception)
                 }
             }
         }
@@ -114,7 +119,7 @@ class CreateLoanViewModel(
         percent: String,
         period: String,
         phoneNumber: String,
-    ): LoanRequest {
+    ): LoanRequest? {
         if (
             firstName.isNotBlank()
             && lastName.isNotBlank()
@@ -123,8 +128,8 @@ class CreateLoanViewModel(
             && period.isNotBlank()
             && phoneNumber.isNotBlank()
         ) {
-            firstName.forEach { if (it.isDigit()) throw RuntimeException(ERROR_INPUT_DATA) }
-            lastName.forEach { if (it.isDigit()) throw RuntimeException(ERROR_INPUT_DATA) }
+            firstName.forEach { if (it.isDigit()) throw NumberFormatException() }
+            lastName.forEach { if (it.isDigit()) throw NumberFormatException() }
             return LoanRequest(
                 amount.trim().toInt(),
                 firstName.trim(),
@@ -134,7 +139,7 @@ class CreateLoanViewModel(
                 phoneNumber.trim()
             )
         } else {
-            throw RuntimeException(ERROR_EMPTY_FIELDS)
+            return null
         }
     }
 

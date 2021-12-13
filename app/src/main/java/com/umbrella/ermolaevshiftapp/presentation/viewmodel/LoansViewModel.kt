@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.umbrella.ermolaevshiftapp.domain.entity.Loan
 import com.umbrella.ermolaevshiftapp.domain.usecase.GetAllLoansUseCase
-import com.umbrella.ermolaevshiftapp.presentation.State
+import com.umbrella.ermolaevshiftapp.presentation.state.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -30,12 +30,13 @@ class LoansViewModel(
                 }
             } catch (httpException: HttpException) {
                 withContext(Dispatchers.Main) {
-                    _loansListLiveData.value =
-                        State.Error(httpException.response()?.errorBody()?.string())
+                    _loansListLiveData.value = State.Error.ErrorResponse(
+                        httpException.code(), httpException.response()?.errorBody()?.string()
+                    )
                 }
             } catch (exception: Exception) {
                 withContext(Dispatchers.Main) {
-                    _loansListLiveData.value = State.Error(exception.message)
+                    _loansListLiveData.value = State.Error.UnknownError(exception)
                 }
             }
         }
