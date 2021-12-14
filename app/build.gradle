@@ -73,4 +73,9 @@ dependencies {
 
     //coroutines test
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1'
+
+    //kaspresso and kakao ui test
+    androidTestImplementation 'com.kaspersky.android-components:kaspresso:1.4.0'
+    androidTestImplementation 'com.agoda.kakao:kakao:2.3.4'
+    androidTestImplementation "org.hamcrest:hamcrest:2.2"
 }
