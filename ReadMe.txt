@@ -1,5 +1,16 @@
 Проект Ермолаева Архипа Федотовича
 
+Ссылка на api: https://focusstart.appspot.com/
+
+Используемый стек:
+1. Clean architecture, MVVM
+2. Kotlin coroutines
+3. Retrofit
+4. Koin
+5. Room
+6. WorkManager
+7. Mockito, Kaspresso, Kakao
+
 Основной функционал:
 1. Оформить заем, указав необходимые данные - сделано
 2. Увидеть информацию о том, что заем успешно оформлен - уведомление тостом
